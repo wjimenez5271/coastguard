@@ -1,10 +1,7 @@
 import digitalocean
 
-DO_TOKEN = ''
-uptime_threshold = ''
 
-
-class DO(object):
+class Digtal_Ocean(object):
     def __init__(self, do_token):
         self.do_token = do_token
         self._conn = None
