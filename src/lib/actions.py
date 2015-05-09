@@ -2,8 +2,8 @@
 
 class Actions(object):
     def terminate_instance(self):
-        pass
+        raise NotImplementedError
 
     def alert(self):
-        pass
+        raise NotImplementedError
 
