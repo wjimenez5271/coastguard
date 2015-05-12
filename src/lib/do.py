@@ -38,7 +38,7 @@ class DigitalOcean(object):
 
 class DoChecks(CheckBase):
     @staticmethod
-    def check_uptime(self, max_uptime):
+    def check_uptime(max_uptime):
         hosts_violated =[]
         c = DigitalOcean(DO_TOKEN)
         for i in c.get_uptime():

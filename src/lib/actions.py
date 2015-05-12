@@ -18,7 +18,7 @@ class NotificationActions(Actions):
         Alert user via email
         """
         try:
-            smtpObj = smtplib.SMTP(mail_server, timeout, )
+            smtpObj = smtplib.SMTP(mail_server, timeout)
             if start_tls:
                 smtpObj.starttls()
             sender = mail_sender
