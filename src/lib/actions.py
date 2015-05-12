@@ -12,7 +12,8 @@ class NotificationActions(Actions):
     def terminate_instance(self):
         raise NotImplementedError
 
-    def alert(self, subject, message, mail_sender, mail_recipient, mail_server, timeout=5, start_tls=False):
+    @staticmethod
+    def alert(subject, message, mail_sender, mail_recipient, mail_server, timeout=5, start_tls=False):
         import smtplib
         """
         Alert user via email

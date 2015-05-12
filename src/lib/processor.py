@@ -3,7 +3,8 @@ import actions
 
 
 def go(config):
-    for host in do.DoChecks.check_uptime():
+    _DOChecks = do.DOChecks()
+    for host in _DOChecks.check_uptime(config['uptime_threshold']):
         if config['email_alert']:
             message = host+" has been running for too long"
             actions.NotificationActions.alert(
@@ -13,5 +14,3 @@ def go(config):
                 config['mail_recipient'],
                 config['mail_server'],
             )
-
-

@@ -2,6 +2,11 @@ import ConfigParser
 
 
 def load_config(configfile):
+    """
+    Load config from ini formatted text file
+    :param configfile: str. path to file
+    :return: dict. configuration attributes
+    """
     parser = ConfigParser.SafeConfigParser()
     parser.read(configfile)
     config = {}
@@ -10,5 +15,7 @@ def load_config(configfile):
     config['mail_sender'] = parser.get('settings', 'mail_sender')
     config['subject'] = parser.get('settings', 'subject')
     config['mail_alert_address'] = parser.get('settings', 'mail_alert_address')
+    config['email_alert'] = parser.get('settings', 'email_alert')
+    config['uptime_threshold'] = parser.get('settings', 'uptime_threshold')
     return config
 
