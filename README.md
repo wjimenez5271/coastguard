@@ -9,3 +9,4 @@ Enforce good behavior in DigitalOcean
 - Warn if instance lauch rate deviates signifantly (detect abuse, program errors)
 - Optionally terminate long-running resources, or ones that violate security requirements
 - Report stats on lifecyles of resources (longest running, avg running time, churn rate, avg resource sizes, etc)
+- Communicate warnings via email, XMPP, and platform specific APIs like hipchat, slack, pagerduty, etc.
