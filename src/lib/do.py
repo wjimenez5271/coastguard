@@ -1,6 +1,9 @@
 import digitalocean
+from datetime import datetime, timedelta
+from eval import *
 
 DO_TOKEN = ''
+
 
 class Digital_Ocean(object):
     def __init__(self, do_token):
@@ -32,7 +35,9 @@ class Digital_Ocean(object):
                       'ssh_key_fingerprint': droplet.ssh_keys()})
         return r
 
+
 class DoChecks(CheckBase):
+    @staticmethod
     def check_uptime(self, max_uptime):
         hosts_violated =[]
         c = Digital_Ocean(DO_TOKEN)
@@ -41,3 +46,6 @@ class DoChecks(CheckBase):
             if (i['created_at'] - datetime.utcnow()) > timedelta(hours=max_uptime):
                 hosts_violated.append(i)
         return hosts_violated
+
+
+
