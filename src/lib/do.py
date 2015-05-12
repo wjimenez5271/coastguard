@@ -5,7 +5,7 @@ from eval import *
 DO_TOKEN = ''
 
 
-class Digital_Ocean(object):
+class DigitalOcean(object):
     def __init__(self, do_token):
         self.do_token = do_token
         self._conn = None
@@ -40,7 +40,7 @@ class DoChecks(CheckBase):
     @staticmethod
     def check_uptime(self, max_uptime):
         hosts_violated =[]
-        c = Digital_Ocean(DO_TOKEN)
+        c = DigitalOcean(DO_TOKEN)
         for i in c.get_uptime():
             # ts format: 2015-05-07T22:27:38Z
             if (i['created_at'] - datetime.utcnow()) > timedelta(hours=max_uptime):
