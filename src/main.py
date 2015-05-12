@@ -7,6 +7,7 @@ import config
 import time
 import sys
 import argparse
+from lib import exceptions
 
 
 def main(configfile):
@@ -24,6 +25,8 @@ def main(configfile):
             time.sleep(60)
     except KeyboardInterrupt:
         sys.exit()
+    except:
+        raise exceptions.CoastguardException
 
 
 if __name__ == '__main__':
