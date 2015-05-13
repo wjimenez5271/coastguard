@@ -1,5 +1,6 @@
 from exceptions import *
 
+
 class Actions(object):
     def terminate_instance(self):
         raise NotImplementedError

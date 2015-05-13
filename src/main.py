@@ -15,7 +15,7 @@ def main(configfile):
     do all the things
     :return:
     """
-    #get config
+    # get config
     global c
     c = config.load_config(configfile)
 
@@ -24,7 +24,7 @@ def main(configfile):
             processor.go(c)
             time.sleep(60)
     except KeyboardInterrupt:
-        sys.exit()
+        sys.exit(0)
     except:
         raise exceptions.CoastguardException
 
