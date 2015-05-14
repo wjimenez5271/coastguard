@@ -7,7 +7,7 @@ import config
 import time
 import sys
 import argparse
-from lib import exceptions
+from lib import util
 import logging
 
 
@@ -40,7 +40,7 @@ def main(configfile):
         sys.exit(0)
     except:
         log.error('Exception')
-        raise exceptions.CoastguardException
+        raise util.CoastguardException
 
 
 if __name__ == '__main__':
