@@ -1,7 +1,9 @@
 import do
 import actions
 from exceptions import *
+import logging
 
+log = logging.getLogger('coastguard')
 
 def go(config):
     """
@@ -9,6 +11,7 @@ def go(config):
     :param config: dict. Configuration object
     :return:
     """
+    log.info('Starting digital ocean checks')
     _DOChecks = do.DOChecks(config['DO_TOKEN'])
     try:
         for host in _DOChecks.check_uptime(config['uptime_threshold']):
