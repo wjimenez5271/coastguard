@@ -1,11 +1,16 @@
 import digitalocean
-from datetime import datetime, timedelta
 from eval import *
-from exceptions import  *
-
+from exceptions import *
+import dateutil.parser
+import dateutil.relativedelta
+from datetime import *
+from dateutil.relativedelta import *
 
 
 class DigitalOcean(object):
+    """
+    This class encompasses everything relating to the DO API
+    """
     def __init__(self, do_token):
         self.do_token = do_token
         self._conn = None
@@ -37,15 +42,25 @@ class DigitalOcean(object):
 
 
 class DOChecks(CheckBase):
+    """
+    Implementation of the CheckBase object for Digital Ocean
+    """
     def __init__(self, DO_TOKEN):
         self.c = DigitalOcean(DO_TOKEN)
 
     def check_uptime(self, max_uptime):
+        """
+        Evaluate the uptime of a digital oceana instance
+        :param max_uptime: int. Uptime threshold in hours
+        :return: lst. hosts violating `max_uptime`.
+        """
         hosts_violated =[]
         try:
             for i in self.c.get_uptime():
-                # ts format: 2015-05-07T22:27:38Z
-                if (i['created_at'] - datetime.utcnow()) > timedelta(hours=max_uptime):
+                # ts format from digital ocean api: 2015-05-07T22:27:38Z
+                created_at = dateutil.parser.parse(i['created_at'])
+                diff = relativedelta(datetime.now(), created_at)
+                if (diff.days * 24) + diff.hours > max_uptime:
                     hosts_violated.append(i)
         except:
             raise CoastguardAPIError
