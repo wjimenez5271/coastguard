@@ -8,5 +8,5 @@ Enforce good behavior in DigitalOcean
 - Warn if backups are running/not running (depending on desired state)
 - Warn if instance launch rate deviates significantly (detect abuse, program errors)
 - Optionally terminate long-running resources, or ones that violate security requirements
-- Report stats on life-cyles of resources (longest running, avg running time, churn rate, avg resource sizes, etc)
+- Report stats on life-cycles of resources (longest running, avg running time, churn rate, avg resource sizes, etc)
 - Communicate warnings via email, XMPP, and platform specific APIs like hipchat, slack, pagerduty, etc.
