@@ -6,6 +6,7 @@ import dateutil.relativedelta
 from datetime import *
 from dateutil.relativedelta import *
 import logging
+from actions import *
 
 log = logging.getLogger('coastguard')
 
@@ -71,5 +72,12 @@ class DOChecks(CheckBase):
             raise CoastguardAPIError
         return hosts_violated
 
+class DOActions(Actions):
+    def __init__(self, DO_TOKEN):
+        if DO_TOKEN is None:
+            raise CoastguardException
+        self.c = DigitalOcean(DO_TOKEN)
 
-
+    def terminate_instance(self, droplet_id):
+        d = self.c.get_droplet(droplet_id)
+        d.shutdown()

@@ -20,6 +20,6 @@ def load_config(configfile):
     try:
         config['DO_TOKEN'] = os.environ['DO_TOKEN']
     except KeyError:
-        config['DO_TOKEN'] = parser.get('settings', 'DO_TOKEN')
+        config['DO_TOKEN'] = parser.get('DigitalOcean', 'DO_TOKEN')
     return config
 

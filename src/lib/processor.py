@@ -2,6 +2,7 @@ import do
 import actions
 from exceptions import *
 import logging
+import do
 
 log = logging.getLogger('coastguard')
 
@@ -24,7 +25,16 @@ def go(config):
                     config['mail_recipient'],
                     config['mail_server'],
                 )
+            if config['terminate_long_running']:
+                terminate_instance(host, config)
     except CoastguardSendEmailError:
-        print "unable to send mail"
+        log.error('unable to send mail')
     except:
+        log.error('Unhandled exception processing digital ocean checks')
         raise CoastguardException
+
+
+def terminate_instance(host, config):
+    log.info('Terminating instance {0}'.format(str(host)))
+    d = do.DOActions(config['DO_TOKEN'])
+    d.terminate_instance(host)
