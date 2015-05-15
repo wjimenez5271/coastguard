@@ -52,7 +52,7 @@ class DOChecks(CheckBase):
     def __init__(self, DO_TOKEN):
         if DO_TOKEN is None:
             raise MissingAuthException
-        self.c = digitalocean.Manager(DO_TOKEN)
+        self.c = digitalocean.Manager(token=DO_TOKEN)
 
     def check_uptime(self, max_uptime):
         """
@@ -64,9 +64,11 @@ class DOChecks(CheckBase):
         droplets = self.c.get_all_droplets()
         try:
             for i in droplets:
-                log.debug('checking uptime of host {0}'.format(i))
+                log.debug('checking uptime of instance {0}'.format(i))
                 # ts format from digital ocean api: 2015-05-07T22:27:38Z
-                created_at = dateutil.parser.parse(i['created_at'])
+                created_at = i.created_at
+                log.debug('instance {0} was created at {1}'.format(i, created_at))
+                created_at = dateutil.parser.parse(created_at)
                 diff = relativedelta(datetime.now(), created_at)
                 if (diff.days * 24) + diff.hours > max_uptime:
                     hosts_violated.append(i)
