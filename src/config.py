@@ -1,5 +1,5 @@
 import ConfigParser
-
+import os
 
 def load_config(configfile):
     """
@@ -17,6 +17,7 @@ def load_config(configfile):
     config['mail_alert_address'] = parser.get('settings', 'mail_alert_address')
     config['email_alert'] = parser.get('settings', 'email_alert')
     config['uptime_threshold'] = parser.get('settings', 'uptime_threshold')
-    config['DO_TOKEN'] = parser.get('settings', 'DO_TOKEN')
+    # One-liner because Daniel's fancy that way.
+    config['DO_TOKEN'] = os.environ.get('DO_TOKEN', None) or parser.get('settings', 'DO_TOKEN')
     return config
 

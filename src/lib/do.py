@@ -1,10 +1,14 @@
 import digitalocean
 from eval import *
-from exceptions import *
+from util import *
 import dateutil.parser
 import dateutil.relativedelta
 from datetime import *
 from dateutil.relativedelta import *
+import logging
+from actions import *
+
+log = logging.getLogger('coastguard')
 
 
 class DigitalOcean(object):
@@ -46,17 +50,20 @@ class DOChecks(CheckBase):
     Implementation of the CheckBase object for Digital Ocean
     """
     def __init__(self, DO_TOKEN):
+        if DO_TOKEN is None:
+            raise MissingAuthException
         self.c = DigitalOcean(DO_TOKEN)
 
     def check_uptime(self, max_uptime):
         """
-        Evaluate the uptime of a digital oceana instance
+        Evaluate the uptime of a digital ocean instance
         :param max_uptime: int. Uptime threshold in hours
         :return: lst. hosts violating `max_uptime`.
         """
-        hosts_violated =[]
+        hosts_violated = []
         try:
             for i in self.c.get_uptime():
+                log.debug('checking uptime of host {0}'.format(i))
                 # ts format from digital ocean api: 2015-05-07T22:27:38Z
                 created_at = dateutil.parser.parse(i['created_at'])
                 diff = relativedelta(datetime.now(), created_at)
@@ -66,5 +73,12 @@ class DOChecks(CheckBase):
             raise CoastguardAPIError
         return hosts_violated
 
+class DOActions(Actions):
+    def __init__(self, DO_TOKEN):
+        if DO_TOKEN is None:
+            raise MissingAuthException
+        self.c = DigitalOcean(DO_TOKEN)
 
-
+    def terminate_instance(self, droplet_id):
+        d = self.c.get_droplet(droplet_id)
+        d.shutdown()
