@@ -54,12 +54,30 @@ class DOChecks(CheckBase):
             raise MissingAuthException
         self.c = digitalocean.Manager(token=DO_TOKEN)
 
+    def eval_delta(self, date1, date2, max_uptime):
+        """
+        Compare the date/time stamps and determine if the instance has violated threshold. Expects like TZ
+        :param date1: datetime obj. first date/time to compare
+        :param date2: datetime obj. second date/time to compare
+        :param max_uptime: int. max uptime in hours
+        :return: bool. True if it has violated, False if not.
+        """
+        diff = relativedelta(date1, date2)
+        age_in_hours = abs((diff.days * 24) + diff.hours)
+        if not age_in_hours > max_uptime:
+            log.debug('instance has been online for {0} hours. threshold {1} hours'.format(
+                age_in_hours, max_uptime))
+            return True
+        else:
+            return False
+
     def check_uptime(self, max_uptime):
         """
         Evaluate the uptime of a digital ocean instance
         :param max_uptime: int. Uptime threshold in hours
         :return: lst. hosts violating `max_uptime`.
         """
+
         hosts_violated = []
         droplets = self.c.get_all_droplets()
         try:
@@ -68,9 +86,9 @@ class DOChecks(CheckBase):
                 # ts format from digital ocean api: 2015-05-07T22:27:38Z
                 created_at = i.created_at
                 log.debug('instance {0} was created at {1}'.format(i, created_at))
-                created_at = dateutil.parser.parse(created_at)
-                diff = relativedelta(datetime.now(), created_at)
-                if (diff.days * 24) + diff.hours > max_uptime:
+                # slice off last char of time stamp to make it timezone unaware.
+                created_at = dateutil.parser.parse(created_at[:-1])
+                if self.eval_delta(created_at,datetime.utcnow(), max_uptime):
                     hosts_violated.append(i)
         except Exception as e:
             log.exception(e)

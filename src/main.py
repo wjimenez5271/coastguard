@@ -31,8 +31,8 @@ def main(configfile):
     log.addHandler(ch)
 
     try:
+        log.info('Starting up')
         while True:
-            log.info('Starting up')
             processor.go(c)
             time.sleep(60)
     except KeyboardInterrupt:
