@@ -11,7 +11,7 @@ from actions import *
 log = logging.getLogger('coastguard')
 
 
-class DigitalOcean(object):
+class CG_DigitalOcean(object):
     """
     This class encompasses everything relating to the DO API
     """
@@ -52,7 +52,7 @@ class DOChecks(CheckBase):
     def __init__(self, DO_TOKEN):
         if DO_TOKEN is None:
             raise MissingAuthException
-        self.c = DigitalOcean(DO_TOKEN)
+        self.c = digitalocean.Manager(DO_TOKEN)
 
     def check_uptime(self, max_uptime):
         """
@@ -61,15 +61,17 @@ class DOChecks(CheckBase):
         :return: lst. hosts violating `max_uptime`.
         """
         hosts_violated = []
+        droplets = self.c.get_all_droplets()
         try:
-            for i in self.c.get_uptime():
+            for i in droplets:
                 log.debug('checking uptime of host {0}'.format(i))
                 # ts format from digital ocean api: 2015-05-07T22:27:38Z
                 created_at = dateutil.parser.parse(i['created_at'])
                 diff = relativedelta(datetime.now(), created_at)
                 if (diff.days * 24) + diff.hours > max_uptime:
                     hosts_violated.append(i)
-        except:
+        except Exception as e:
+            log.exception(e)
             raise CoastguardAPIError
         return hosts_violated
 
@@ -77,7 +79,7 @@ class DOActions(Actions):
     def __init__(self, DO_TOKEN):
         if DO_TOKEN is None:
             raise MissingAuthException
-        self.c = DigitalOcean(DO_TOKEN)
+        self.c = CG_DigitalOcean(DO_TOKEN)
 
     def terminate_instance(self, droplet_id):
         d = self.c.get_droplet(droplet_id)

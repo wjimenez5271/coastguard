@@ -7,8 +7,8 @@ import config
 import time
 import sys
 import argparse
-from lib import util
 import logging
+from lib.util import *
 
 
 
@@ -38,10 +38,9 @@ def main(configfile):
     except KeyboardInterrupt:
         log.info('Exiting on user interrupt')
         sys.exit(0)
-    except:
-        log.error('Exception')
-        raise util.CoastguardException
-
+    except CoastguardAPIError:
+        log.error('Exception communicating with infrastructure provider API')
+        sys.exit(1)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Coastguard')
