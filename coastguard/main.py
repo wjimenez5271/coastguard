@@ -12,14 +12,17 @@ from lib.util import *
 
 
 
-def main(configfile):
+def main():
     """
     do all the things
     :return:
     """
     # get config
+    parser = argparse.ArgumentParser(description='Coastguard')
+    parser.add_argument("--config", help="Path to config file", required=True)
+    args = parser.parse_args()
     global c
-    c = config.load_config(configfile)
+    c = config.load_config(args.config)
 
     # setup logging
     log = logging.getLogger('coastguard')
@@ -40,8 +43,4 @@ def main(configfile):
         sys.exit(0)
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Coastguard')
-    parser.add_argument("--config", help="Path to config file", required=True)
-    args = parser.parse_args()
-
-    main(args.config)
+    main()
