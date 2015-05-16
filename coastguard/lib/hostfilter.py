@@ -28,8 +28,8 @@ class HostFilter(object):
         whitelist = None
         blackilst = None
         if parser.has_section(section):
-            whitelist = parser.get(section, 'hostname_whitelist').splitlines()
-            blacklist = parser.get(section, 'hostname_blacklist').splitlines()
+            whitelist = parser.get(section, 'whitelist').splitlines()
+            blacklist = parser.get(section, 'blacklist').splitlines()
         return HostFilter(whitelist, blacklist)
 
     def allowed(self, host, attributeName=None):
