@@ -50,6 +50,7 @@ class DOChecks(CheckBase):
     Implementation of the CheckBase object for Digital Ocean
     """
     def __init__(self, DO_TOKEN):
+        super(DOChecks, self).__init__()
         if DO_TOKEN is None:
             raise MissingAuthException
         self.c = digitalocean.Manager(token=DO_TOKEN)
@@ -64,7 +65,7 @@ class DOChecks(CheckBase):
         """
         diff = relativedelta(date1, date2)
         age_in_hours = abs((diff.days * 24) + diff.hours)
-        if not age_in_hours > max_uptime:
+        if not age_in_hours <= max_uptime:
             log.debug('instance has been online for {0} hours. threshold {1} hours'.format(
                 age_in_hours, max_uptime))
             return True
@@ -77,22 +78,17 @@ class DOChecks(CheckBase):
         :param max_uptime: int. Uptime threshold in hours
         :return: lst. hosts violating `max_uptime`.
         """
-
         hosts_violated = []
         droplets = self.c.get_all_droplets()
-        try:
-            for i in droplets:
-                log.debug('checking uptime of instance {0}'.format(i))
-                # ts format from digital ocean api: 2015-05-07T22:27:38Z
-                created_at = i.created_at
-                log.debug('instance {0} was created at {1}'.format(i, created_at))
-                # slice off last char of time stamp to make it timezone unaware.
-                created_at = dateutil.parser.parse(created_at[:-1])
-                if self.eval_delta(created_at,datetime.utcnow(), max_uptime):
-                    hosts_violated.append(i)
-        except Exception as e:
-            log.exception(e)
-            raise CoastguardAPIError
+        for i in droplets:
+            log.debug('checking uptime of instance {0}'.format(i))
+            # ts format from digital ocean api: 2015-05-07T22:27:38Z
+            created_at = i.created_at
+            log.debug('instance {0} was created at {1}'.format(i, created_at))
+            # slice off last char of time stamp to make it timezone unaware.
+            created_at = dateutil.parser.parse(created_at[:-1])
+            if self.eval_delta(created_at,datetime.utcnow(), max_uptime):
+                hosts_violated.append(i)
         return hosts_violated
 
 class DOActions(Actions):
