@@ -7,8 +7,8 @@ import config
 import time
 import sys
 import argparse
-from lib import util
 import logging
+from lib.util import *
 
 
 
@@ -31,17 +31,13 @@ def main(configfile):
     log.addHandler(ch)
 
     try:
+        log.info('Starting up')
         while True:
-            log.info('Starting up')
             processor.go(c)
             time.sleep(60)
     except KeyboardInterrupt:
         log.info('Exiting on user interrupt')
         sys.exit(0)
-    except:
-        log.error('Exception')
-        raise util.CoastguardException
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Coastguard')

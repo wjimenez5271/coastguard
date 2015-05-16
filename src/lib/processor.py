@@ -29,7 +29,10 @@ def go(config):
                 terminate_instance(host, config)
     except CoastguardSendEmailError:
         log.error('unable to send mail')
-    except:
+    except CoastguardAPIError:
+        log.error('Exception communicating with infrastructure provider API')
+    except Exception as e:
+        log.exception(e)
         log.error('Unhandled exception processing digital ocean checks')
         raise CoastguardException
 

@@ -11,7 +11,7 @@ from actions import *
 log = logging.getLogger('coastguard')
 
 
-class DigitalOcean(object):
+class CG_DigitalOcean(object):
     """
     This class encompasses everything relating to the DO API
     """
@@ -50,9 +50,27 @@ class DOChecks(CheckBase):
     Implementation of the CheckBase object for Digital Ocean
     """
     def __init__(self, DO_TOKEN):
+        super(DOChecks, self).__init__()
         if DO_TOKEN is None:
             raise MissingAuthException
-        self.c = DigitalOcean(DO_TOKEN)
+        self.c = digitalocean.Manager(token=DO_TOKEN)
+
+    def eval_delta(self, date1, date2, max_uptime):
+        """
+        Compare the date/time stamps and determine if the instance has violated threshold. Expects like TZ
+        :param date1: datetime obj. first date/time to compare
+        :param date2: datetime obj. second date/time to compare
+        :param max_uptime: int. max uptime in hours
+        :return: bool. True if it has violated, False if not.
+        """
+        diff = relativedelta(date1, date2)
+        age_in_hours = abs((diff.days * 24) + diff.hours)
+        if not age_in_hours <= max_uptime:
+            log.debug('instance has been online for {0} hours. threshold {1} hours'.format(
+                age_in_hours, max_uptime))
+            return True
+        else:
+            return False
 
     def check_uptime(self, max_uptime):
         """
@@ -61,23 +79,23 @@ class DOChecks(CheckBase):
         :return: lst. hosts violating `max_uptime`.
         """
         hosts_violated = []
-        try:
-            for i in self.c.get_uptime():
-                log.debug('checking uptime of host {0}'.format(i))
-                # ts format from digital ocean api: 2015-05-07T22:27:38Z
-                created_at = dateutil.parser.parse(i['created_at'])
-                diff = relativedelta(datetime.now(), created_at)
-                if (diff.days * 24) + diff.hours > max_uptime:
-                    hosts_violated.append(i)
-        except:
-            raise CoastguardAPIError
+        droplets = self.c.get_all_droplets()
+        for i in droplets:
+            log.debug('checking uptime of instance {0}'.format(i))
+            # ts format from digital ocean api: 2015-05-07T22:27:38Z
+            created_at = i.created_at
+            log.debug('instance {0} was created at {1}'.format(i, created_at))
+            # slice off last char of time stamp to make it timezone unaware.
+            created_at = dateutil.parser.parse(created_at[:-1])
+            if self.eval_delta(created_at,datetime.utcnow(), max_uptime):
+                hosts_violated.append(i)
         return hosts_violated
 
 class DOActions(Actions):
     def __init__(self, DO_TOKEN):
         if DO_TOKEN is None:
             raise MissingAuthException
-        self.c = DigitalOcean(DO_TOKEN)
+        self.c = CG_DigitalOcean(DO_TOKEN)
 
     def terminate_instance(self, droplet_id):
         d = self.c.get_droplet(droplet_id)
