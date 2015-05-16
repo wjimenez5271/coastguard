@@ -1,5 +1,5 @@
 import ConfigParser
-from lib.HostFilter import HostFilter
+from lib.hostfilter import HostFilter
 import os
 
 def load_config(configfile):
