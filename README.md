@@ -2,9 +2,16 @@
 # Coastguard
 Enforce good behavior in DigitalOcean
 
+### Installation
+From the repo root
+```
+python setup.py install
+```
+This should install the console script `coastguard` into your PATH.
+
 ### Usage
 ```
-python src/main.py -c configfile.ini
+coastguard --config configfile.ini
 ```
 
 Requires DO API token. This can either be set in the `.ini` config file or as an environment variable named `DO_TOKEN` (with the evar taking precedence). 
