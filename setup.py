@@ -10,6 +10,6 @@ setup(
     author_email='wjimenez5271@gmail.com',
     description='Enforce good behavior in DigitalOcean',
     zip_safe=False,
-    entry_points = {
+    entry_points={
         'console_scripts': ['coastguard=coastguard.main:main']}
 )
