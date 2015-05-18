@@ -11,5 +11,6 @@ setup(
     description='Enforce good behavior in DigitalOcean',
     zip_safe=False,
     entry_points={
-        'console_scripts': ['coastguard=coastguard.main:main']}
+        'console_scripts': ['coastguard=coastguard.main:main']},
+    install_requires = ['argparse', 'dateutil'],
 )
