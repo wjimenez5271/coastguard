@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/wjimenez5271/coastguard.svg?branch=master)](https://travis-ci.org/wjimenez5271/coastguard)
 [![Join the chat at https://gitter.im/wjimenez5271/coastguard](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/wjimenez5271/coastguard?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 # Coastguard
 Enforce good behavior in DigitalOcean
@@ -27,3 +28,4 @@ Requires DO API token. This can either be set in the `.ini` config file or as an
 - Communicate warnings via email, XMPP, and platform specific APIs like hipchat, slack, pagerduty, etc.
 
 Pull requests welcome!
+
