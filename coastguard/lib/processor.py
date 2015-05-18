@@ -13,7 +13,7 @@ def go(config):
     :return:
     """
     log.info('Starting digital ocean checks')
-    _DOChecks = do.DOChecks(config['DO_TOKEN'])
+    _DOChecks = do.DOChecks(config['HostFilter'], config['DO_TOKEN'])
     try:
         for host in _DOChecks.check_uptime(config['uptime_threshold']):
             if config['email_alert']:

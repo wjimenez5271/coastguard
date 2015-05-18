@@ -1,4 +1,5 @@
 import ConfigParser
+from lib.hostfilter import HostFilter
 import os
 
 def load_config(configfile):
@@ -26,5 +27,6 @@ def load_config(configfile):
         config['terminate_long_running'] = None
     # One-liner because Daniel's fancy that way.
     config['DO_TOKEN'] = os.environ.get('DO_TOKEN', None) or parser.get('DigitalOcean', 'DO_TOKEN')
+    config['HostFilter'] = HostFilter.fromConfig(parser)
     return config
 

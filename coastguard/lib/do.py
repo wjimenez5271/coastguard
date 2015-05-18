@@ -49,8 +49,8 @@ class DOChecks(CheckBase):
     """
     Implementation of the CheckBase object for Digital Ocean
     """
-    def __init__(self, DO_TOKEN):
-        super(DOChecks, self).__init__()
+    def __init__(self, hostFilter, DO_TOKEN):
+        super(DOChecks, self).__init__(hostFilter)
         if DO_TOKEN is None:
             raise MissingAuthException
         self.c = digitalocean.Manager(token=DO_TOKEN)
@@ -79,7 +79,7 @@ class DOChecks(CheckBase):
         :return: lst. hosts violating `max_uptime`.
         """
         hosts_violated = []
-        droplets = self.c.get_all_droplets()
+        droplets = self.hostFilter.filter(self.c.get_all_droplets(), 'name')
         for i in droplets:
             log.debug('checking uptime of instance {0}'.format(i))
             # ts format from digital ocean api: 2015-05-07T22:27:38Z
