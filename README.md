@@ -9,6 +9,11 @@ python src/main.py -c configfile.ini
 
 Requires DO API token. This can either be set in the `.ini` config file or as an environment variable named `DO_TOKEN` (with the evar taking precedence). 
 
+### Requirements
+- Python 2.7
+- dateutil
+- argparse
+
 ### Ideas
 - Warn if resources have been running for too long
 - Warn if firewalls are not running
