@@ -6,6 +6,7 @@ import do
 
 log = logging.getLogger('coastguard')
 
+
 def go(config):
     """
     Base method for starting coastguard

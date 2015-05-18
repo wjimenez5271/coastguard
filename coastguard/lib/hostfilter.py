@@ -3,6 +3,7 @@ import logging
 
 log = logging.getLogger('coastguard')
 
+
 def createRe(l):
     if not l or len(l) == 0:
         return None
@@ -17,6 +18,8 @@ regexes in a whitelist and another set as a blacklist.
 Hostnames are only denied if they match an item in the blacklist and do not match
 any items in the whitelist.
 '''
+
+
 class HostFilter(object):
     def __init__(self, whitelist, blacklist):
         self.whitelist = createRe(whitelist)

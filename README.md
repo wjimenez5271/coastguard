@@ -17,6 +17,8 @@ coastguard --config configfile.ini
 
 Requires DO API token. This can either be set in the `.ini` config file or as an environment variable named `DO_TOKEN` (with the evar taking precedence). 
 
+See `examples/config.ini` for a sample of what the config file should look like.
+
 ### Requirements
 - Python 2.7
 - dateutil

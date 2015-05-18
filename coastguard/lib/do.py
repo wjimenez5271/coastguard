@@ -91,6 +91,7 @@ class DOChecks(CheckBase):
                 hosts_violated.append(i)
         return hosts_violated
 
+
 class DOActions(Actions):
     def __init__(self, DO_TOKEN):
         if DO_TOKEN is None:
@@ -98,5 +99,6 @@ class DOActions(Actions):
         self.c = CG_DigitalOcean(DO_TOKEN)
 
     def terminate_instance(self, droplet_id):
+        log.info('terminating instance {0}'.format(str(droplet_id)))
         d = self.c.get_droplet(droplet_id)
         d.shutdown()
