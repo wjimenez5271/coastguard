@@ -4,4 +4,5 @@ python:
   - "2.6"
 
 script:
-  - python test/hostfilter_test.py
+  - cd test
+  - python hostfilter_test.py
