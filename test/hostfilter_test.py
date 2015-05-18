@@ -1,10 +1,10 @@
 #!/usr/bin/python
 import sys
+sys.path.append('../')
+
 import unittest
 from coastguard.lib.hostfilter import HostFilter
 from collections import namedtuple
-
-sys.path.append('../')
 
 TestHost = namedtuple("TestHost", "name, blah")
 
